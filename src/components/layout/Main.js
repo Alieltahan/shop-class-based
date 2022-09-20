@@ -10,8 +10,6 @@ import SpecificCategory from './pages/SpecificCategory';
 import Loader from '../Loader/loader';
 import { compose } from 'redux';
 import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
-import { connect } from 'react-redux';
-import { currCategory, routeCategory } from '../store/activeCategory';
 import NotFound from '../404/NotFound';
 
 class Main extends Component {
@@ -25,7 +23,7 @@ class Main extends Component {
           currencies={this.props.data.currencies}
         />
         <Routes>
-          <Route path="/product/:id" element={<PDP />} />
+          <Route path="/:category/:id" element={<PDP />} />
           {this.props.data?.categories.map((category) => (
             <Route
               key={category.name}
@@ -44,15 +42,8 @@ class Main extends Component {
     );
   }
 }
-const mapStateToProps = (state) => ({
-  activeCategory: state.activeCategory.activeCategory,
-});
-const mapDispatchToProps = (dispatch) => ({
-  currentCategory: () => dispatch(currCategory(this.props.location.pathname)),
-  updateCategoryRoute: (path) => dispatch(routeCategory(path)),
-});
+
 export default compose(
   graphql(QUERY_ALL_PRODUCTS_Categories_Currencies),
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+  withRouter
 )(Main);

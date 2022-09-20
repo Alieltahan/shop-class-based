@@ -12,8 +12,8 @@ import { ProductContainerStyle } from './ProductCardStyles';
 import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
 
 class ProductCard extends Component {
-  handleProductDescription = (id) => {
-    this.props.navigate(`/product/${id}`);
+  handleProductDescription = (product) => {
+    this.props.navigate(`/${product.category}/${product.id}`);
   };
   render() {
     return (
@@ -24,7 +24,7 @@ class ProductCard extends Component {
             <div className="product">
               <div className="product__image-container">
                 <div
-                  onClick={() => this.handleProductDescription(product.id)}
+                  onClick={() => this.handleProductDescription(product)}
                   className={
                     !product.inStock
                       ? 'product__outOfStock'
@@ -61,7 +61,7 @@ class ProductCard extends Component {
                   </>
                 )} */}
                 <img
-                  onClick={() => this.handleProductDescription(product.id)}
+                  onClick={() => this.handleProductDescription(product)}
                   src={product.gallery[0]}
                   alt={product.name}
                 ></img>

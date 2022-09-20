@@ -10,7 +10,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { AddToCartChkr } from '../lib/AddToCartChkr';
 import { addProduct } from '../store/cart';
-import { routeCategory } from '../store/activeCategory';
 import { ProductCcyPrice } from '../lib/ProductCcyPrice/ProductCcyPrice';
 /**
  * @props {productId} String of Product ID.
@@ -42,11 +41,10 @@ class ProductDescription extends Component {
     this.props.clearProductAtt();
   };
 
+  return;
   render() {
     if (this.props.data.loading) return <Loader />;
-    this.props.routeCategory(this.props.data.product?.category);
 
-    // console.log(`DESC===>`, this.props);
     const { product } = this.props.data;
     const { handleAttributes, productOptionSelected, activeCurrency } =
       this.props;
@@ -66,7 +64,7 @@ class ProductDescription extends Component {
         </div>
 
         <div className="product__details">
-          {product.gallery && (
+          {product?.gallery && (
             <img
               src={product.gallery[thumbnail]}
               className="product__image-main"
@@ -125,7 +123,6 @@ const mapStateToProps = (state) => ({
   activeCurrency: state.ccy.label,
 });
 const mapDispatchToProps = (dispatch) => ({
-  routeCategory: (categoryName) => dispatch(routeCategory(categoryName)),
   addProduct: (product) => dispatch(addProduct(product)),
 });
 

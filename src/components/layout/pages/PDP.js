@@ -4,8 +4,8 @@ import { withRouter } from '../../lib/WithHOC/ReactRouter/WithRouter';
 
 class PDP extends Component {
   render() {
-    const ProductId = this.props.location.pathname.slice(9);
-    return <ProductDescription productId={ProductId} />;
+    const { id } = this.props.params;
+    return <ProductDescription productId={id} />;
   }
 }
 

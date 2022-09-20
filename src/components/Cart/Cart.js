@@ -5,7 +5,6 @@ import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
 import { addProduct, decrementProduct, miniCartToggle } from '../store/cart';
 import { CartFooter, ContainerStyles } from './Cart.styles';
 import ArrowImg from '../../media/svg/ArrowImg.svg';
-import { routeCategory } from '../store/activeCategory';
 import { ProductCcyPrice } from '../lib/ProductCcyPrice/ProductCcyPrice';
 import { CalculateTax } from '../lib/CalculateTax';
 
@@ -35,7 +34,6 @@ class Cart extends Component {
     }
   };
   render() {
-    this.props.updateCategoryRoute('');
     const { cart, mini, addProduct, decrementProduct, currency } = this.props;
     return (
       <ContainerStyles>
@@ -312,7 +310,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(addProduct({ ...product, ...currency })),
   decrementProduct: (product, currency) =>
     dispatch(decrementProduct({ ...product, ...currency })),
-  updateCategoryRoute: (path) => dispatch(routeCategory(path)),
 });
 
 export default compose(

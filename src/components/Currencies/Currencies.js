@@ -6,7 +6,6 @@ import { toggleSwitcher, updateCcy } from '../store/currency';
 import {
   CcyStyle,
   CcySwitcherStyle,
-  SpaceStyle,
   SymbolFrame,
   WrapperCcyArrowStyle,
 } from './Currencies.styles';
@@ -59,7 +58,6 @@ class Currencies extends Component {
   }
 }
 const mapStateToProps = (state) => ({
-  activeCategory: state.activeCategory.activeCategory,
   ccy: state.ccy,
   storeProducts: state.cart.products,
 });

@@ -1,10 +1,6 @@
 import { Component } from 'react';
 import logo from '../../media/svg/logo.svg';
 import cartlogo from '../../media/svg/cart.svg';
-// import { Currencies } from './Currencies';
-
-// import { MiniCart } from './MiniCart';
-// import { miniCartToggle } from './store/cart';
 import {
   CartCurrencyWrapper,
   CartStyle,
@@ -53,11 +49,7 @@ class Navbar extends Component {
       <>
         <HeaderStyles>
           {this.props.categories.map((cat) => (
-            <NavLink
-              className={this.props.activeCategory === cat.name ? 'active' : ''}
-              key={cat.name}
-              to={cat?.name === 'all' ? '/' : cat?.name}
-            >
+            <NavLink key={cat.name} to={cat?.name === 'all' ? '/' : cat?.name}>
               <HeaderCategoryStyles>{cat?.name}</HeaderCategoryStyles>
             </NavLink>
           ))}
@@ -78,7 +70,6 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activeCategory: state.activeCategory.activeCategory,
   cart: state.cart,
 });
 const mapDispatchToProps = (dispatch) => ({
