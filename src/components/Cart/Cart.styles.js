@@ -20,8 +20,8 @@ export const ContainerStyles = styled.div`
     display: flex;
     flex-direction: column;
     &-mini {
-      position: fixed;
-      width: 32.5rem;
+      /* position: fixed; */
+      width: 29.5rem;
       max-height: 31.5rem;
       overflow: auto;
       margin: 2.3rem 0;
@@ -193,7 +193,7 @@ export const ContainerStyles = styled.div`
             }
             &-selected {
               background-color: #1d1f22;
-              border: 3px solid #1d1f22;
+              border: 1px solid var(--c-primary);
               color: #ffffff;
               opacity: 0.5;
               &-mini {

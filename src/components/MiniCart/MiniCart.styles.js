@@ -6,10 +6,10 @@ export const Container = styled.div`
   height: auto;
   max-height: 54rem;
   background-color: #ffffff;
-  position: absolute;
+  position: fixed;
   top: 7.8rem;
   right: 8.7rem;
-  z-index: 5;
+  z-index: 10;
   header {
     margin: 0.8rem auto 0 1.6rem;
     font-size: 1.6rem;
