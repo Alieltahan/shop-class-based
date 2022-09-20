@@ -59,34 +59,39 @@ export const ContainerStyles = styled.div`
           width: 13.7rem;
         }
         &-arrow {
-          height: 100%;
-          width: 2rem;
+          /* height: 100%; */
+
           z-index: 2;
           position: absolute;
-          width: 100%;
+
+          width: 7.2rem;
           display: flex;
-          justify-content: center;
+          justify-content: end;
           align-items: center;
-          gap: 30%;
+          bottom: 1.6rem;
+          right: 1.6rem;
+          gap: 0.8rem;
           > img {
             height: 2rem;
             width: 2rem;
           }
           &-container {
+            background-color: rgba(0, 0, 0, 0.73);
+
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 3;
-            height: 100%;
-            width: 100%;
+            height: 2.4rem;
+            width: 2.4rem;
           }
           &-rt {
-            height: 2rem;
-            width: 2rem;
+            height: 1.124rem;
+            width: 0.563rem;
           }
           &-lf {
-            height: 2rem;
-            width: 2rem;
+            height: 1.124rem;
+            width: 0.563rem;
             transform: rotate(180deg);
           }
         }

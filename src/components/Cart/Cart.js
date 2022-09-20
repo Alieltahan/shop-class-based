@@ -212,7 +212,6 @@ class Cart extends Component {
                             alt="arrow"
                           />
                         </span>
-                        <div></div>
                         <span
                           onClick={() => this.handleNextImg(product)}
                           className="item__img-arrow-container"
