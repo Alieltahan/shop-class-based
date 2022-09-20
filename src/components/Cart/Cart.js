@@ -7,6 +7,7 @@ import { CartFooter, ContainerStyles } from './Cart.styles';
 import ArrowImg from '../../media/svg/ArrowImg.svg';
 import { routeCategory } from '../store/activeCategory';
 import { ProductCcyPrice } from '../lib/ProductCcyPrice/ProductCcyPrice';
+import { CalculateTax } from '../lib/CalculateTax';
 
 class Cart extends Component {
   state = {
@@ -246,7 +247,8 @@ class Cart extends Component {
           <>
             <div className="footer">
               <div className="footer__total"> Total</div>
-              <div className={`footer__amount ${this.props.currency}`}>
+              <div className={`footer__amount`}>
+                {this.props.currency.symbol}
                 {Math.floor(this.props.cart.totalAmount * 100) / 100 || 0}
               </div>
             </div>
@@ -271,13 +273,13 @@ class Cart extends Component {
             </div>
           </>
         )}
-        {!mini && (
+        {!mini && this.props.cart.totalAmount && (
           <CartFooter>
             <p className="cart__info">
               Tax 21%:{' '}
               <span className="numbers">
                 {currency.symbol}
-                {((this.props.cart.totalAmount * 21) / 100).toFixed(2)}{' '}
+                {CalculateTax(21, this.props.cart.totalAmount)}
               </span>
             </p>
             <p className="cart__info">

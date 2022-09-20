@@ -80,6 +80,7 @@ export const CcySwitcherStyle = styled.div`
     padding-top: 1.23rem;
     height: 4.5rem;
     width: 11.4rem;
+    cursor: pointer;
     /* padding: 1.05rem 4rem 0rem 2rem; */
     &:hover {
       background-color: #eeeeee;
