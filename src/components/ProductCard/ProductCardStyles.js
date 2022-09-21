@@ -17,7 +17,7 @@ export const ProductContainerStyle = styled.div`
     & .product__image-container-carticon {
       cursor: pointer;
       opacity: 1;
-      z-index: 5;
+      z-index: 6;
     }
   }
   .product {
@@ -151,14 +151,4 @@ export const ProductContainerStyle = styled.div`
       }
     }
   }
-`;
-export const Modal = styled.div`
-  background-color: #ccc;
-  position: fixed;
-  top: 8rem;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 4;
-  opacity: 0.5;
 `;
