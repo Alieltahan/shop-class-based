@@ -197,8 +197,8 @@ class Cart extends Component {
                   <div
                     className={!mini ? 'item__img' : 'item__img item__img-mini'}
                   >
-                    {/* Rendering the Arrows only if there is more than 1 pic */}
-                    {product.gallery.length !== 1 && (
+                    {/* Rendering the Arrows only if there is more than 1 pic & on Cart Page only.*/}
+                    {product.gallery.length !== 1 && !mini && (
                       <span className="item__img-arrow">
                         <span
                           onClick={() => this.handlePrevImg(product)}
