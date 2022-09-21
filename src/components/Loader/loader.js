@@ -1,4 +1,4 @@
-import { Modal } from '../ProductCard/ProductCardStyles';
+import Modal from '../Modal/Modal';
 import './loader.styles.css';
 
 const Loader = () => {
