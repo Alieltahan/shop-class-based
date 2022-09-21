@@ -4,7 +4,6 @@ import Main from './components/layout/Main';
 
 import { Toaster } from 'react-hot-toast';
 import { createGlobalStyle } from 'styled-components';
-import Loader from './components/Loader/loader';
 
 const GlobalStyles = createGlobalStyle`
 :root{

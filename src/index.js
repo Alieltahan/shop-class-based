@@ -14,19 +14,15 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   uri: 'http://localhost:4000',
 });
-// client
-//   .query({
-//     query: gql`
-//       query QUERY_CATEGORIES {
-//         categories {
-//           name
-//         }
-//       }
-//     `,
-//   })
-//   .then((da) => console.log(da));
 
 const store = confStore();
+store.subscribe(() =>
+  setTimeout(
+    () => localStorage.setItem('ecom', JSON.stringify(store.getState())),
+    800
+  )
+);
+console.warn('Please clear LocalStorage if page didnt load');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
