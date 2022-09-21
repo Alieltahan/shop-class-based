@@ -1,0 +1,29 @@
+.overlay {
+  position: absolute;
+  background-color: rgba(228, 228, 228, 0.5);
+  height: 100%;
+  width: 100%;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  z-index: 4;
+  .product {
+    &__details {
+      &__attribute {
+        &-text {
+          // Changed
+          margin-top: 1rem;
+          font-size: 1.5rem;
+          //
+        }
+        &-boxes {
+          // Changed
+          width: 4.5rem;
+          height: 4.5rem;
+          border-radius: 50%;
+          //
+        }
+      }
+    }
+  }
+}
