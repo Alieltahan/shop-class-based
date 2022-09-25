@@ -19,6 +19,7 @@ export default compose(
     options: (props) => {
       return {
         variables: { category: props.category },
+        fetchPolicy: 'no-cache',
       };
     },
   })
