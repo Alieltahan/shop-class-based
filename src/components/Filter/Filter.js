@@ -17,7 +17,7 @@ class Filter extends Component {
   getAllAttributes() {
     const Attributes = {};
     this.props.products.map((p) =>
-      p.attributes.map((at) => {
+      p.attributes.forEach((at) => {
         let property = at.name.split(' ').join('_');
         if (!Attributes[property]) {
           Attributes[property] = [];

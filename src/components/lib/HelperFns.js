@@ -11,11 +11,11 @@ export const getFilteredProducts = (products, inputs) => {
 
   let filteredProducts = [];
   let result = [];
-  products.map((p) => {
-    p.attributes.map((at, i) => {
+  products.forEach((p) => {
+    p.attributes.forEach((at, i) => {
       const AttributeNameWithoutSpace = removeSpaces(at.name);
       Object.keys(selectedAttributes).includes(AttributeNameWithoutSpace) &&
-        at.items.filter((item) => {
+        at.items.forEach((item) => {
           if (
             item.value === selectedAttributes[AttributeNameWithoutSpace] ||
             item.value.toLowerCase() === 'yes'
@@ -24,13 +24,13 @@ export const getFilteredProducts = (products, inputs) => {
         });
     });
   });
-  filteredProducts.map((f) => {
+  filteredProducts.forEach((f) => {
     const allAttributesNames = [];
     f.attributes.map((at) => allAttributesNames.push(removeSpaces(at.name)));
     const check = Object.keys(selectedAttributes).every((e) =>
       allAttributesNames.includes(e)
     );
-    if (check) return result.push(f);
+    if (check) result.push(f);
   });
   return getUniqueArray(result);
 };
