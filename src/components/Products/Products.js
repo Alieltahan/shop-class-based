@@ -14,7 +14,7 @@ class Products extends Component {
   componentDidMount() {
     const result = {};
     this.props.searchParam.forEach((value, key) =>
-      value !== '' ? (result[key] = value) : null
+      value !== '' && value ? (result[key] = value) : null
     );
     if (Object.keys(result).length !== 0) {
       const filtered = getFilteredProducts(this.props.products, result);
@@ -48,7 +48,7 @@ class Products extends Component {
     //  2- Empty Object with no keys.
     const selectedAttributes = {};
     Object.keys(inputs).filter((k) =>
-      inputs[k] !== '' ? (selectedAttributes[k] = inputs[k]) : null
+      inputs[k] !== '' && inputs[k] ? (selectedAttributes[k] = inputs[k]) : null
     );
     if (Object.keys(selectedAttributes).length === 0) {
       this.setState({ filteredProducts: this.props.products });
