@@ -50,98 +50,11 @@ class Cart extends Component {
                 key={`${mini ? product.id : product.id + i}`}
               >
                 <div>
-                  <span
-                    className="item__brand-container"
-                    onClick={() => {
-                      this.props.navigate(
-                        `product/${product.id.split(',')[0]}`
-                      );
-                      miniCartToggle();
-                    }}
-                  >
-                    <div
-                      className={
-                        !mini ? 'item__brand' : 'item__brand item__brand-mini '
-                      }
-                    >
-                      {product.brand}
-                    </div>
-                    <div
-                      className={
-                        !mini ? 'item__name' : 'item__name item__name-mini'
-                      }
-                    >
-                      {product.name}
-                    </div>
-                  </span>
-                  <div
-                    className={
-                      !mini ? 'item__price' : 'item__price item__price-mini'
-                    }
-                  >
-                    <p className={currency.label}>
-                      {ProductCcyPrice(product.prices, currency.label)}
-                    </p>
-                  </div>
-                  {product.attributes.map((att) => (
-                    <div
-                      key={att.id}
-                      className={
-                        !mini ? 'item__att' : 'item__att item__att-mini'
-                      }
-                    >
-                      {att.type === 'swatch'
-                        ? att.items.map((option) => (
-                            <div
-                              key={option.id}
-                              style={{
-                                backgroundColor: `${option.value}`,
-                              }}
-                              className={
-                                !mini
-                                  ? `${
-                                      product.selectedOptions[0].attributes.some(
-                                        (opt) => opt.option === option.id
-                                      )
-                                        ? 'item__att-boxes item__att-boxes-colored item__att-boxes-colored-selected'
-                                        : 'item__att-boxes item__att-boxes-colored'
-                                    }`
-                                  : `${
-                                      product.selectedOptions[0].attributes.some(
-                                        (opt) => opt.option === option.id
-                                      )
-                                        ? 'item__att-boxes item__att-boxes-colored item__att-boxes-mini item__att-boxes-colored-selected'
-                                        : 'item__att-boxes item__att-boxes-colored item__att-boxes-mini item__att-boxes-colored-selected-mini'
-                                    }`
-                              }
-                            ></div>
-                          ))
-                        : att.items.map((option) => (
-                            <span
-                              key={option.id}
-                              className={
-                                !mini
-                                  ? `${
-                                      product.selectedOptions[0].attributes
-                                        .filter((arr) => arr.id === att.id)
-                                        .some((opt) => opt.option === option.id)
-                                        ? 'item__att-boxes selected '
-                                        : 'item__att-boxes'
-                                    }`
-                                  : `${
-                                      product.selectedOptions[0].attributes
-                                        .filter((arr) => arr.id === att.id)
-                                        .some((opt) => opt.option === option.id)
-                                        ? 'item__att-boxes item__att-boxes-mini item__att-boxes-mini selected-mini '
-                                        : 'item__att-boxes item__att-boxes-mini'
-                                    }`
-                              }
-                            >
-                              <p>{option.value}</p>
-                            </span>
-                          ))}
-                    </div>
-                  ))}
+                  {this.renderProductBrandName(product, mini)}
+                  {this.renderProductPrice(mini, currency, product)}
+                  {product.attributes.map((att) =>
+                    this.renderProductAttributes(att, mini, product)
+                  )}
                 </div>
                 <div
                   className={
@@ -150,152 +63,278 @@ class Cart extends Component {
                       : 'item__counters-container item__counters-container-mini'
                   }
                 >
-                  <div
-                    className={
-                      !mini
-                        ? 'item__counters'
-                        : 'item__counters item__counters-mini'
-                    }
-                  >
-                    <div
-                      onClick={() =>
-                        addProduct({ ...product, currency: currency.label })
-                      }
-                      className={
-                        !mini
-                          ? 'item__counters-op'
-                          : 'item__counters-op item__counters-op-mini'
-                      }
-                    >
-                      +
-                    </div>
-                    <div
-                      className={
-                        !mini
-                          ? 'item__counters-count'
-                          : 'item__counters-count item__counters-count-mini'
-                      }
-                    >
-                      {product.quantity}
-                    </div>
-                    <div
-                      onClick={() =>
-                        decrementProduct({
-                          ...product,
-                          currency: currency.label,
-                        })
-                      }
-                      className={
-                        !mini
-                          ? 'item__counters-op'
-                          : 'item__counters-op item__counters-op-mini'
-                      }
-                    >
-                      -
-                    </div>
-                  </div>
+                  {this.IncreaseDecreaseProductQuantity(
+                    mini,
+                    addProduct,
+                    product,
+                    currency,
+                    decrementProduct
+                  )}
                   <div
                     className={!mini ? 'item__img' : 'item__img item__img-mini'}
                   >
                     {/* Rendering the Arrows only if there is more than 1 pic & on Cart Page only.*/}
-                    {product.gallery.length !== 1 && !mini && (
-                      <span className="item__img-arrow">
-                        <span
-                          onClick={() => this.handlePrevImg(product)}
-                          className="item__img-arrow-container"
-                        >
-                          <img
-                            src={ArrowImg}
-                            className="item__img-arrow-lf"
-                            alt="arrow"
-                          />
-                        </span>
-                        <span
-                          onClick={() => this.handleNextImg(product)}
-                          className="item__img-arrow-container"
-                        >
-                          <img
-                            src={ArrowImg}
-                            className="item__img-arrow-rt"
-                            alt="arrow"
-                          />
-                        </span>
-                      </span>
-                    )}
+                    {this.renderProductsImageChanger(product, mini)}
 
-                    <img
-                      src={
-                        product.gallery[this.state.inputs[product.id]] ||
-                        product.gallery[0]
-                      }
-                      alt={product.name}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `${this.handleNextImg(product)}`;
-                      }}
-                    />
+                    {this.renderProductDisplayImage(product)}
                   </div>
                 </div>
               </li>
             ))}
           </ul>
         )}
-        {mini && (
-          <>
-            <div className="footer">
-              <div className="footer__total"> Total</div>
-              <div className={`footer__amount`}>
-                {this.props.currency.symbol}
-                {Math.floor(this.props.cart.totalAmount * 100) / 100 || 0}
-              </div>
-            </div>
-            <div className="footer__btns">
-              <button
-                onClick={() => {
-                  this.props.miniCartToggle();
-                  this.props.navigate('/cart');
-                }}
-                type="button"
-                className="footer__btn footer__btn-white"
-              >
-                view bag
-              </button>
-              <button
-                disabled={!this.props.cart.products.length}
-                type="button"
-                className="footer__btn footer__btn-co-primary"
-              >
-                checkout
-              </button>
-            </div>
-          </>
-        )}
-        {!mini && this.props.cart.totalAmount && (
-          <CartFooter>
-            <p className="cart__info">
-              Tax 21%:{' '}
-              <span className="numbers">
-                {currency.symbol}
-                {CalculateTax(21, this.props.cart.totalAmount)}
-              </span>
-            </p>
-            <p className="cart__info">
-              Quantity:{' '}
-              <span className="numbers">{this.props.cart.totalCount}</span>
-            </p>
-            <p className="cart__info">
-              Total:
-              <span className="numbers">
-                {currency.symbol}
-                {(Math.floor(this.props.cart.totalAmount * 100) / 100).toFixed(
-                  2
-                ) || 0}
-              </span>
-            </p>
-            <div className="cart__btn">order</div>
-          </CartFooter>
-        )}
+        {this.renderMiniCartFooter(mini)}
+        {this.renderCartFooterDetails(mini, currency)}
       </ContainerStyles>
+    );
+  }
+
+  renderProductDisplayImage(product) {
+    return (
+      <img
+        src={
+          product.gallery[this.state.inputs[product.id]] || product.gallery[0]
+        }
+        alt={product.name}
+      />
+    );
+  }
+
+  renderProductsImageChanger(product, mini) {
+    return (
+      product.gallery.length !== 1 &&
+      !mini && (
+        <span className="item__img-arrow">
+          <span
+            onClick={() => this.handlePrevImg(product)}
+            className="item__img-arrow-container"
+          >
+            <img src={ArrowImg} className="item__img-arrow-lf" alt="arrow" />
+          </span>
+          <span
+            onClick={() => this.handleNextImg(product)}
+            className="item__img-arrow-container"
+          >
+            <img src={ArrowImg} className="item__img-arrow-rt" alt="arrow" />
+          </span>
+        </span>
+      )
+    );
+  }
+
+  IncreaseDecreaseProductQuantity(
+    mini,
+    addProduct,
+    product,
+    currency,
+    decrementProduct
+  ) {
+    return (
+      <div
+        className={
+          !mini ? 'item__counters' : 'item__counters item__counters-mini'
+        }
+      >
+        <div
+          onClick={() => addProduct({ ...product, currency: currency.label })}
+          className={
+            !mini
+              ? 'item__counters-op'
+              : 'item__counters-op item__counters-op-mini'
+          }
+        >
+          +
+        </div>
+        <div
+          className={
+            !mini
+              ? 'item__counters-count'
+              : 'item__counters-count item__counters-count-mini'
+          }
+        >
+          {product.quantity}
+        </div>
+        <div
+          onClick={() =>
+            decrementProduct({
+              ...product,
+              currency: currency.label,
+            })
+          }
+          className={
+            !mini
+              ? 'item__counters-op'
+              : 'item__counters-op item__counters-op-mini'
+          }
+        >
+          -
+        </div>
+      </div>
+    );
+  }
+
+  renderProductAttributes(att, mini, product) {
+    return (
+      <div
+        key={att.id}
+        className={!mini ? 'item__att' : 'item__att item__att-mini'}
+      >
+        {att.type === 'swatch'
+          ? att.items.map((option) => (
+              <div
+                key={option.id}
+                style={{
+                  backgroundColor: `${option.value}`,
+                }}
+                className={
+                  !mini
+                    ? `${
+                        product.selectedOptions[0].attributes.some(
+                          (opt) => opt.option === option.id
+                        )
+                          ? 'item__att-boxes item__att-boxes-colored item__att-boxes-colored-selected'
+                          : 'item__att-boxes item__att-boxes-colored'
+                      }`
+                    : `${
+                        product.selectedOptions[0].attributes.some(
+                          (opt) => opt.option === option.id
+                        )
+                          ? 'item__att-boxes item__att-boxes-colored item__att-boxes-mini item__att-boxes-colored-selected'
+                          : 'item__att-boxes item__att-boxes-colored item__att-boxes-mini item__att-boxes-colored-selected-mini'
+                      }`
+                }
+              ></div>
+            ))
+          : att.items.map((option) => (
+              <span
+                key={option.id}
+                className={
+                  !mini
+                    ? `${
+                        product.selectedOptions[0].attributes
+                          .filter((arr) => arr.id === att.id)
+                          .some((opt) => opt.option === option.id)
+                          ? 'item__att-boxes selected '
+                          : 'item__att-boxes'
+                      }`
+                    : `${
+                        product.selectedOptions[0].attributes
+                          .filter((arr) => arr.id === att.id)
+                          .some((opt) => opt.option === option.id)
+                          ? 'item__att-boxes item__att-boxes-mini item__att-boxes-mini selected-mini '
+                          : 'item__att-boxes item__att-boxes-mini'
+                      }`
+                }
+              >
+                <p>{option.value}</p>
+              </span>
+            ))}
+      </div>
+    );
+  }
+
+  renderProductPrice(mini, currency, product) {
+    return (
+      <div className={!mini ? 'item__price' : 'item__price item__price-mini'}>
+        <p className={currency.label}>
+          {ProductCcyPrice(product.prices, currency.label)}
+        </p>
+      </div>
+    );
+  }
+
+  renderProductBrandName(product, mini) {
+    return (
+      <span
+        className="item__brand-container"
+        onClick={() => {
+          this.props.navigate(`product/${product.id.split(',')[0]}`);
+          miniCartToggle();
+        }}
+      >
+        <div
+          className={!mini ? 'item__brand' : 'item__brand item__brand-mini '}
+        >
+          {product.brand}
+        </div>
+        <div className={!mini ? 'item__name' : 'item__name item__name-mini'}>
+          {product.name}
+        </div>
+      </span>
+    );
+  }
+
+  renderMiniCartFooter(mini) {
+    return (
+      mini && (
+        <>
+          <div className="footer">
+            <div className="footer__total"> Total</div>
+            <div className={`footer__amount`}>
+              {this.props.currency.symbol}
+              {Math.floor(this.props.cart.totalAmount * 100) / 100 || 0}
+            </div>
+          </div>
+          <div className="footer__btns">
+            <button
+              onClick={() => {
+                this.props.miniCartToggle();
+                this.props.navigate('/cart');
+              }}
+              type="button"
+              className="footer__btn footer__btn-white"
+            >
+              view bag
+            </button>
+            <button
+              disabled={!this.props.cart.products.length}
+              type="button"
+              className="footer__btn footer__btn-co-primary"
+            >
+              checkout
+            </button>
+          </div>
+        </>
+      )
+    );
+  }
+
+  /**
+   * @param {Boolean} mini
+   * @param {Object} currency
+   * @param {String} currency.label currency code
+   * @param {String} currency.symbol currency symbol
+   * @returns footer details (Total / Tax / Order Btn)
+   */
+  renderCartFooterDetails(mini, currency) {
+    if (this.props.cart.products.length === 0) return null;
+    return (
+      !mini &&
+      this.props.cart.totalAmount && (
+        <CartFooter>
+          <p className="cart__info">
+            Tax 21%:{' '}
+            <span className="numbers">
+              {currency.symbol}
+              {CalculateTax(21, this.props.cart.totalAmount)}
+            </span>
+          </p>
+          <p className="cart__info">
+            Quantity:{' '}
+            <span className="numbers">{this.props.cart.totalCount}</span>
+          </p>
+          <p className="cart__info">
+            Total:
+            <span className="numbers">
+              {currency.symbol}
+              {(Math.floor(this.props.cart.totalAmount * 100) / 100).toFixed(
+                2
+              ) || 0}
+            </span>
+          </p>
+          <div className="cart__btn">order</div>
+        </CartFooter>
+      )
     );
   }
 }
