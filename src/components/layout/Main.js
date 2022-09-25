@@ -14,7 +14,6 @@ import NotFound from '../404/NotFound';
 
 class Main extends Component {
   render() {
-    // console.log(`---MAIN---`, this.props);
     if (this.props.data.loading) return <Loader />;
     return (
       <>
@@ -44,6 +43,12 @@ class Main extends Component {
 }
 
 export default compose(
-  graphql(QUERY_ALL_PRODUCTS_Categories_Currencies),
+  graphql(QUERY_ALL_PRODUCTS_Categories_Currencies, {
+    options: () => {
+      return {
+        fetchPolicy: 'no-cache',
+      };
+    },
+  }),
   withRouter
 )(Main);

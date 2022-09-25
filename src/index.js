@@ -22,7 +22,6 @@ store.subscribe(() =>
     800
   )
 );
-console.warn('Please clear LocalStorage if page didnt load');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

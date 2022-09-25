@@ -40,11 +40,8 @@ class ProductDescription extends Component {
 
     this.props.clearProductAtt();
   };
-
-  return;
   render() {
     if (this.props.data.loading) return <Loader />;
-
     const { product } = this.props.data;
     const { handleAttributes, productOptionSelected, activeCurrency } =
       this.props;
@@ -75,7 +72,7 @@ class ProductDescription extends Component {
             <h4 className="product__details__brand">{product.brand}</h4>
             <p>{product.name}</p>
             <ProductAttributes
-              productId={product.id}
+              id={product.id}
               handleAttributes={handleAttributes}
               productOptionSelected={productOptionSelected}
             />
