@@ -21,6 +21,44 @@ class ProductDescription extends Component {
     selectAttribute: false,
   };
 
+  render() {
+    if (this.props.data.loading) return <Loader />;
+    const { product } = this.props.data;
+    const { handleAttributes, productOptionSelected, activeCurrency } =
+      this.props;
+    const { thumbnail } = this.state;
+    return (
+      <ProductContainer>
+        <div>{this.renderProductGallery(product)}</div>
+
+        <div className="product__details">
+          {this.renderProductThumbnail(product, thumbnail)}
+          <div className="product__details__content">
+            <h4 className="product__details__brand">{product.brand}</h4>
+            <p>{product.name}</p>
+            <ProductAttributes
+              id={product.id}
+              handleAttributes={handleAttributes}
+              productOptionSelected={productOptionSelected}
+            />
+            {this.renderProductPrice(activeCurrency, product)}
+            {this.renderProductBtn(product, productOptionSelected)}
+            {this.renderValidateSelectAttributes()}
+            {renderProductDescription()}
+          </div>
+        </div>
+      </ProductContainer>
+    );
+
+    function renderProductDescription() {
+      return (
+        <div className="product__details-description" id="details">
+          {parse(product.description)}
+        </div>
+      );
+    }
+  }
+
   handleImageChange = (index) => {
     this.setState({
       thumbnail: index,
@@ -40,79 +78,74 @@ class ProductDescription extends Component {
 
     this.props.clearProductAtt();
   };
-  render() {
-    if (this.props.data.loading) return <Loader />;
-    const { product } = this.props.data;
-    const { handleAttributes, productOptionSelected, activeCurrency } =
-      this.props;
-    const { thumbnail } = this.state;
-    return (
-      <ProductContainer>
-        <div>
-          {product.gallery?.map((image, index) => (
-            <img
-              onClick={() => this.handleImageChange(index)}
-              className={`product__sideImage- product__sideImage-${index}`}
-              key={`${image}` + index}
-              src={image}
-              alt={`${product.name} pic ${index}`}
-            />
-          ))}
-        </div>
 
-        <div className="product__details">
-          {product?.gallery && (
-            <img
-              src={product.gallery[thumbnail]}
-              className="product__image-main"
-              alt={`product pic ${thumbnail + 1}`}
-            />
-          )}
-          <div className="product__details__content">
-            <h4 className="product__details__brand">{product.brand}</h4>
-            <p>{product.name}</p>
-            <ProductAttributes
-              id={product.id}
-              handleAttributes={handleAttributes}
-              productOptionSelected={productOptionSelected}
-            />
-            <div className="product__details__attribute-price">
-              <p>price:</p>
-              <div>
-                <p className={activeCurrency}>
-                  {ProductCcyPrice(product.prices, activeCurrency).toFixed(2)}
-                </p>
-              </div>
-            </div>
-            <div>
-              <button
-                disabled={!product.inStock}
-                onClick={() => {
-                  this.setState({ selectAttribute: false });
-                  AddToCartChkr({
-                    ...product,
-                    selectedOptions: productOptionSelected,
-                  })
-                    ? this.handleAddToCart(product, productOptionSelected)
-                    : this.setState({ selectAttribute: true });
-                }}
-                className="product__details-btn"
-              >
-                {!product.inStock ? 'out of stock' : 'add to cart'}
-              </button>
-            </div>
-            {this.state.selectAttribute && (
-              <div className="product__details-att">
-                !Please select all available options for the product!
-              </div>
-            )}
-            <div className="product__details-description" id="details">
-              {parse(product.description)}
-            </div>
-          </div>
+  renderValidateSelectAttributes() {
+    return (
+      this.state.selectAttribute && (
+        <div className="product__details-att">
+          !Please select all available options for the product!
         </div>
-      </ProductContainer>
+      )
     );
+  }
+
+  renderProductBtn(product, productOptionSelected) {
+    return (
+      <div>
+        <button
+          disabled={!product.inStock}
+          onClick={() => {
+            this.setState({ selectAttribute: false });
+            AddToCartChkr({
+              ...product,
+              selectedOptions: productOptionSelected,
+            })
+              ? this.handleAddToCart(product, productOptionSelected)
+              : this.setState({ selectAttribute: true });
+          }}
+          className="product__details-btn"
+        >
+          {!product.inStock ? 'out of stock' : 'add to cart'}
+        </button>
+      </div>
+    );
+  }
+
+  renderProductPrice(activeCurrency, product) {
+    return (
+      <div className="product__details__attribute-price">
+        <p>price:</p>
+        <div>
+          <p className={activeCurrency}>
+            {ProductCcyPrice(product.prices, activeCurrency).toFixed(2)}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  renderProductThumbnail(product, thumbnail) {
+    return (
+      product?.gallery && (
+        <img
+          src={product.gallery[thumbnail]}
+          className="product__image-main"
+          alt={`product pic ${thumbnail + 1}`}
+        />
+      )
+    );
+  }
+
+  renderProductGallery(product) {
+    return product.gallery?.map((image, index) => (
+      <img
+        onClick={() => this.handleImageChange(index)}
+        className={`product__sideImage- product__sideImage-${index}`}
+        key={`${image}` + index}
+        src={image}
+        alt={`${product.name} pic ${index}`}
+      />
+    ));
   }
 }
 

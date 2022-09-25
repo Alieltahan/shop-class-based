@@ -9,7 +9,6 @@ import { Container } from './MiniCart.styles';
 
 class MiniCart extends Component {
   render() {
-    // console.log(this.props, `MINI `);
     const { totalCount } = this.props.cart;
     return (
       <Modal
@@ -22,7 +21,6 @@ class MiniCart extends Component {
               <header>
                 <span>My Bag</span>, {totalCount} item{totalCount > 1 && 's'}
               </header>
-              {/* default option is true */}
               <Cart mini />
             </Container>
           )}

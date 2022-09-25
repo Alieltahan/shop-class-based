@@ -21,6 +21,27 @@ class Products extends Component {
       this.setState({ filteredProducts: filtered });
     } else this.setState({ filteredProducts: this.props.products });
   }
+
+  render() {
+    // this.setState({ products: this.props.products });
+    let currentPath = this.props.location.pathname;
+    if (currentPath === '/') currentPath = '/all';
+
+    return (
+      <>
+        <CategoryNameStyle>{currentPath.slice(1)}</CategoryNameStyle>
+        <Filter
+          onSubmit={this.onSubmit}
+          onReset={this.onReset}
+          products={this.props.products}
+        />
+        <ProductsContainer>
+          <ProductCard products={this.state.filteredProducts} />
+        </ProductsContainer>
+      </>
+    );
+  }
+
   onSubmit = (inputs) => {
     // Validating inputs based on:
     //  1- Empty values.
@@ -45,25 +66,6 @@ class Products extends Component {
   onReset = () => {
     this.setState({ filteredProducts: this.props.products });
   };
-  render() {
-    // this.setState({ products: this.props.products });
-    let currentPath = this.props.location.pathname;
-    if (currentPath === '/') currentPath = '/all';
-
-    return (
-      <>
-        <CategoryNameStyle>{currentPath.slice(1)}</CategoryNameStyle>
-        <Filter
-          onSubmit={this.onSubmit}
-          onReset={this.onReset}
-          products={this.props.products}
-        />
-        <ProductsContainer>
-          <ProductCard products={this.state.filteredProducts} />
-        </ProductsContainer>
-      </>
-    );
-  }
 }
 
 export default compose(withRouter)(Products);

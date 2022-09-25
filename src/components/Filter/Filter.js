@@ -63,6 +63,10 @@ class Filter extends Component {
     </select>
   );
 
+  /**
+   * @param {Object.key} k Object Key of attributes.
+   * @returns HTML element as Color Boxes
+   */
   renderColorBoxes = (k) => {
     return this.state.productsAttributes[k].map((v) => {
       return (
@@ -92,6 +96,32 @@ class Filter extends Component {
     );
   };
 
+  /**
+   * @param {Object} inputs Form inputs
+   * @returns form btns
+   */
+  renderFormBtns = (inputs) => {
+    return (
+      <div className="form__btn-container">
+        <button
+          className="form__btn"
+          type="submit"
+          value="submit"
+          disabled={Object.keys(inputs).length === 0}
+        >
+          Filter
+        </button>
+        <button
+          className="form__btn form__btn-reset"
+          type="reset"
+          onClick={this.handleResetFilter}
+        >
+          Reset
+        </button>
+      </div>
+    );
+  };
+
   render() {
     const { inputs } = this.props;
     const { productsAttributes } = this.state;
@@ -115,23 +145,7 @@ class Filter extends Component {
               </div>
             );
           })}
-          <div className="form__btn-container">
-            <button
-              className="form__btn"
-              type="submit"
-              value="submit"
-              disabled={Object.keys(inputs).length === 0}
-            >
-              Filter
-            </button>
-            <button
-              className="form__btn form__btn-reset"
-              type="reset"
-              onClick={this.handleResetFilter}
-            >
-              Reset
-            </button>
-          </div>
+          {this.renderFormBtns(inputs)}
         </form>
       </div>
     );

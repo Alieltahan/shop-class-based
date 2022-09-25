@@ -20,6 +20,59 @@ class ProductCard extends Component {
   state = {
     selectAttributes: false,
   };
+
+  render() {
+    if (this.props.products.length === 0)
+      return (
+        <EmptySearchTxt className="empty-search">
+          There is no products for this filter criteria...
+        </EmptySearchTxt>
+      );
+    return (
+      <>
+        {this.props.cartOverlay.isOpen && (
+          <Modal
+            open={this.props.cartOverlay.isOpen}
+            onClose={this.handleCloseCartOverlay}
+          />
+        )}
+        {this.props.products?.map((product) => (
+          <ProductContainerStyle key={product.id}>
+            <div className="product">
+              <div className="product__image-container">
+                <div
+                  onClick={() => this.handleProductDescription(product)}
+                  className={
+                    !product.inStock
+                      ? 'product__outOfStock'
+                      : 'product__outOfStock-hide'
+                  }
+                >
+                  <p>OUT OF STOCK</p>
+                </div>
+                {/* Won't render the Cart Icon if Product out of Stock */}
+                {this.renderCartIcon(product)}
+                {product.id === this.props.cartOverlay.id &&
+                  this.props.cartOverlay.isOpen && (
+                    <>
+                      {this.state.selectAttributes && <SelectAllAttributes />}
+                      <ProductAttributesOverlay
+                        id={product.id}
+                        handleAttributes={this.props.handleAttributes}
+                        productOptionSelected={this.props.productOptionSelected}
+                      />
+                    </>
+                  )}
+                {this.renderProductImage(product)}
+                {this.renderProductNamePrice(product)}
+              </div>
+            </div>
+          </ProductContainerStyle>
+        ))}
+      </>
+    );
+  }
+
   handleAddToCart = (product) => {
     this.props.clearProductAtt();
 
@@ -58,82 +111,47 @@ class ProductCard extends Component {
     this.props.clearProductAtt();
     this.props.cartOverlayClose();
   };
-  render() {
-    if (this.props.products.length === 0)
-      return (
-        <EmptySearchTxt className="empty-search">
-          There is no products for this filter criteria...
-        </EmptySearchTxt>
-      );
+
+  renderProductNamePrice(product) {
     return (
-      <>
-        {this.props.cartOverlay.isOpen && (
-          <Modal
-            open={this.props.cartOverlay.isOpen}
-            onClose={this.handleCloseCartOverlay}
-          />
-        )}
-        {this.props.products?.map((product) => (
-          <ProductContainerStyle key={product.id}>
-            <div className="product">
-              <div className="product__image-container">
-                <div
-                  onClick={() => this.handleProductDescription(product)}
-                  className={
-                    !product.inStock
-                      ? 'product__outOfStock'
-                      : 'product__outOfStock-hide'
-                  }
-                >
-                  <p>OUT OF STOCK</p>
-                </div>
-                {/* Won't render the Cart Icon if Product out of Stock */}
-                {product.inStock && (
-                  <span
-                    onClick={() => {
-                      this.setState({ selectAttributes: false });
-                      AddToCartChkr({
-                        ...product,
-                        selectedOptions: this.props.productOptionSelected,
-                      })
-                        ? this.handleAddToCart(product)
-                        : this.handleAddToCartFalse(product);
-                    }}
-                    className="product__image-container-carticon"
-                  >
-                    <img alt="cartLogo" src={cartLogo} />
-                  </span>
-                )}
-                {product.id === this.props.cartOverlay.id &&
-                  this.props.cartOverlay.isOpen && (
-                    <>
-                      {this.state.selectAttributes && <SelectAllAttributes />}
-                      <ProductAttributesOverlay
-                        id={product.id}
-                        handleAttributes={this.props.handleAttributes}
-                        productOptionSelected={this.props.productOptionSelected}
-                      />
-                    </>
-                  )}
-                <img
-                  onClick={() => this.handleProductDescription(product)}
-                  src={product.gallery[0]}
-                  alt={product.name}
-                ></img>
-                <div className="product__content">
-                  <p>{product.name}</p>
-                  <div
-                  // className={currency}
-                  >
-                    {this.props.currency.symbol}
-                    {ProductCcyPrice(product.prices, this.props.currency.label)}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ProductContainerStyle>
-        ))}
-      </>
+      <div className="product__content">
+        <p>{product.name}</p>
+        <div>
+          {this.props.currency.symbol}
+          {ProductCcyPrice(product.prices, this.props.currency.label)}
+        </div>
+      </div>
+    );
+  }
+
+  renderProductImage(product) {
+    return (
+      <img
+        onClick={() => this.handleProductDescription(product)}
+        src={product.gallery[0]}
+        alt={product.name}
+      ></img>
+    );
+  }
+
+  renderCartIcon(product) {
+    return (
+      product.inStock && (
+        <span
+          onClick={() => {
+            this.setState({ selectAttributes: false });
+            AddToCartChkr({
+              ...product,
+              selectedOptions: this.props.productOptionSelected,
+            })
+              ? this.handleAddToCart(product)
+              : this.handleAddToCartFalse(product);
+          }}
+          className="product__image-container-carticon"
+        >
+          <img alt="cartLogo" src={cartLogo} />
+        </span>
+      )
     );
   }
 }

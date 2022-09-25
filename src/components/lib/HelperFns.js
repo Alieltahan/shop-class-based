@@ -30,7 +30,7 @@ export const getFilteredProducts = (products, inputs) => {
     const check = Object.keys(selectedAttributes).every((e) =>
       allAttributesNames.includes(e)
     );
-    if (check) result.push(f);
+    if (check) return result.push(f);
   });
   return getUniqueArray(result);
 };
