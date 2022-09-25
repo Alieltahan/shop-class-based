@@ -84,6 +84,7 @@ export const ContainerStyles = styled.div`
             z-index: 3;
             height: 2.4rem;
             width: 2.4rem;
+            cursor: pointer;
           }
           &-rt {
             height: 1.124rem;

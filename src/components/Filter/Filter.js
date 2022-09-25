@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import { compose } from 'redux';
 import CheckBox from '../common/Checkbox/Checkbox';
-import { getUniqueArray } from '../lib/ArrayUniqueValues';
-import { getFilteredProducts } from '../lib/FilterFn';
+import { getUniqueArray } from '../lib/HelperFns';
 import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
 import { WithForm } from '../lib/WithHOC/withForm/WithForm';
 import './Filter.scss';
@@ -94,11 +93,8 @@ class Filter extends Component {
   };
 
   render() {
-    // console.log(this.state.productsAttributes);
-    const { handleChange, inputs, resetForm, products } = this.props;
-    // console.log(products);
+    const { inputs } = this.props;
     const { productsAttributes } = this.state;
-    // console.log(`ATTRIBUTES`, this.state.);
 
     return (
       <div className="filter__container">

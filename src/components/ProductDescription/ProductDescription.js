@@ -8,7 +8,7 @@ import { ProductContainer } from './ProductDescription.styles';
 import { WithForm } from '../lib/WithHOC/withForm/WithForm';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { AddToCartChkr } from '../lib/AddToCartChkr';
+import { AddToCartChkr } from '../lib/HelperFns';
 import { addProduct } from '../store/cart';
 import { ProductCcyPrice } from '../lib/ProductCcyPrice/ProductCcyPrice';
 /**

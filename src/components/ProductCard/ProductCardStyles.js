@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const EmptySearchTxt = styled.h3`
+  grid-column: 1/-1;
+  margin-top: 3rem;
+`;
+
 export const ProductContainerStyle = styled.div`
   position: static;
   top: 0;

@@ -6,7 +6,7 @@ import { addProduct, decrementProduct, miniCartToggle } from '../store/cart';
 import { CartFooter, ContainerStyles } from './Cart.styles';
 import ArrowImg from '../../media/svg/ArrowImg.svg';
 import { ProductCcyPrice } from '../lib/ProductCcyPrice/ProductCcyPrice';
-import { CalculateTax } from '../lib/CalculateTax';
+import { CalculateTax } from '../lib/HelperFns';
 
 class Cart extends Component {
   state = {

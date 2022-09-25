@@ -1,10 +1,10 @@
 import cartLogo from '../../media/svg/EmptyCart-white.svg';
 import { Component } from 'react';
-import { ProductContainerStyle } from './ProductCardStyles';
+import { EmptySearchTxt, ProductContainerStyle } from './ProductCardStyles';
 import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
 import { compose } from 'redux';
 import { WithForm } from '../lib/WithHOC/withForm/WithForm';
-import { AddToCartChkr } from '../lib/AddToCartChkr';
+import { AddToCartChkr } from '../lib/HelperFns';
 import {
   addProduct,
   cartOverlayClose,
@@ -59,6 +59,12 @@ class ProductCard extends Component {
     this.props.cartOverlayClose();
   };
   render() {
+    if (this.props.products.length === 0)
+      return (
+        <EmptySearchTxt className="empty-search">
+          There is no products for this filter criteria...
+        </EmptySearchTxt>
+      );
     return (
       <>
         {this.props.cartOverlay.isOpen && (
