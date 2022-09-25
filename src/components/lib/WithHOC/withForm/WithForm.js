@@ -5,6 +5,7 @@ import { useState } from 'react';
 export const WithForm = (Component) => {
   const Wrapper = (props) => {
     const [productOptionSelected, setProductOptionSelected] = useState([]);
+    const [inputs, setInputs] = useState({});
 
     const handleAttributes = (ProductId, att, option) => {
       const attId = att.id;
@@ -48,6 +49,7 @@ export const WithForm = (Component) => {
         );
       }
     };
+
     const clearProductAtt = () => {
       setProductOptionSelected(
         produce((draft) => {
@@ -56,11 +58,37 @@ export const WithForm = (Component) => {
       );
     };
 
+    function handleChange(e) {
+      let { value, name, type } = e.target;
+      // CheckBox special value for Boolean
+      if (type === 'checkbox') {
+        value = !inputs[name];
+      }
+      // if (type === 'radio') {
+      //   value = id;
+      // }
+      setInputs((prevState) => ({
+        // copy the existing state
+        ...prevState,
+        [name]: value,
+      }));
+    }
+    function handleFilterColors(value) {
+      setInputs({ ...inputs, Color: value });
+    }
+
+    function resetForm() {
+      setInputs({});
+    }
     return (
       <Component
         handleAttributes={handleAttributes}
         clearProductAtt={clearProductAtt}
         productOptionSelected={productOptionSelected}
+        inputs={inputs}
+        handleChange={handleChange}
+        resetForm={resetForm}
+        handleFilterColors={handleFilterColors}
         {...props}
       />
     );
