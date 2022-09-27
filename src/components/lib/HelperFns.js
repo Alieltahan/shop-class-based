@@ -6,33 +6,29 @@
 export const getFilteredProducts = (products, inputs) => {
   const selectedAttributes = {};
   Object.keys(inputs).filter((k) =>
-    inputs[k] !== '' ? (selectedAttributes[k] = inputs[k]) : null
+    inputs[k] !== '' && inputs[k].toLowerCase() !== 'no'
+      ? (selectedAttributes[k] = inputs[k])
+      : null
   );
-
   let filteredProducts = [];
-  let result = [];
+  const selectedAttributesKeys = Object.keys(selectedAttributes);
   products.forEach((p) => {
+    let matchCount = 0;
     p.attributes.forEach((at, i) => {
       const AttributeNameWithoutSpace = removeSpaces(at.name);
-      Object.keys(selectedAttributes).includes(AttributeNameWithoutSpace) &&
+      selectedAttributesKeys.includes(AttributeNameWithoutSpace) &&
         at.items.forEach((item) => {
           if (
-            item.value === selectedAttributes[AttributeNameWithoutSpace] ||
-            item.value.toLowerCase() === 'yes'
+            item.value.toLowerCase() ===
+            selectedAttributes[AttributeNameWithoutSpace].toLowerCase()
           )
-            filteredProducts.push(p);
+            matchCount += 1;
         });
+      if (matchCount === selectedAttributesKeys.length)
+        filteredProducts.push(p);
     });
   });
-  filteredProducts.forEach((f) => {
-    const allAttributesNames = [];
-    f.attributes.map((at) => allAttributesNames.push(removeSpaces(at.name)));
-    const check = Object.keys(selectedAttributes).every((e) =>
-      allAttributesNames.includes(e)
-    );
-    if (check) result.push(f);
-  });
-  return getUniqueArray(result);
+  return getUniqueArray(filteredProducts);
 };
 
 function removeSpaces(input) {

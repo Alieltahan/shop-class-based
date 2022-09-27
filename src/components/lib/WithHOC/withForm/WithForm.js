@@ -62,11 +62,9 @@ export const WithForm = (Component) => {
       let { value, name, type } = e.target;
       // CheckBox special value for Boolean
       if (type === 'checkbox') {
-        value = !inputs[name];
+        if (value === 'No') value = 'Yes';
+        else value = 'No';
       }
-      // if (type === 'radio') {
-      //   value = id;
-      // }
       setInputs((prevState) => ({
         // copy the existing state
         ...prevState,

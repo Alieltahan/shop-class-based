@@ -143,15 +143,12 @@ export const ToggleContainer = styled.div`
 const CheckBox = ({ onInput, onChange, name }) => {
   return (
     <ToggleContainer>
-      <label
-        className="form__label-check"
-        onClick={() => console.log(`CLICKED Check--LABEL`)}
-        htmlFor={name}
-      ></label>
+      <label className="form__label-check" htmlFor={name}></label>
       <div className="button r" id="button-2">
         <input
           type="checkbox"
-          checked={!onInput[name]}
+          checked={onInput[name] !== 'Yes' ? true : false}
+          value={onInput[name] || 'No'}
           onChange={onChange}
           className="checkbox"
           name={name}
