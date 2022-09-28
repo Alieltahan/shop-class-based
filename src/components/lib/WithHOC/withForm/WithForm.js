@@ -1,11 +1,13 @@
 /* Custom Hook to handle the Products Attributes */
 import produce from 'immer';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export const WithForm = (Component) => {
   const Wrapper = (props) => {
     const [productOptionSelected, setProductOptionSelected] = useState([]);
     const [inputs, setInputs] = useState({});
+    const [searchParams, setSearchParams] = useSearchParams({});
 
     const handleAttributes = (ProductId, att, option) => {
       const attId = att.id;
@@ -70,12 +72,23 @@ export const WithForm = (Component) => {
         ...prevState,
         [name]: value,
       }));
+      setSearchParams({
+        // copy the existing state
+        ...inputs,
+        [name]: value,
+      });
     }
     function handleFilterColors(value) {
       setInputs({ ...inputs, Color: value });
+      setSearchParams({
+        // copy the existing state
+        ...inputs,
+        Color: value,
+      });
     }
 
     function resetForm() {
+      setSearchParams({});
       setInputs({});
     }
 
@@ -94,6 +107,8 @@ export const WithForm = (Component) => {
         resetForm={resetForm}
         handleFilterColors={handleFilterColors}
         onLoadInitInputs={onLoadInitInputs}
+        onSearchParams={setSearchParams}
+        searchParam={searchParams}
         {...props}
       />
     );
