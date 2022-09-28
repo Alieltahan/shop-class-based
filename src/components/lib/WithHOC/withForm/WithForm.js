@@ -78,6 +78,12 @@ export const WithForm = (Component) => {
     function resetForm() {
       setInputs({});
     }
+
+    function onLoadInitInputs(obj) {
+      setInputs({
+        ...obj,
+      });
+    }
     return (
       <Component
         handleAttributes={handleAttributes}
@@ -87,6 +93,7 @@ export const WithForm = (Component) => {
         handleChange={handleChange}
         resetForm={resetForm}
         handleFilterColors={handleFilterColors}
+        onLoadInitInputs={onLoadInitInputs}
         {...props}
       />
     );
