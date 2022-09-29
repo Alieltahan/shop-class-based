@@ -5,25 +5,50 @@
  */
 export const getFilteredProducts = (products, inputs) => {
   const selectedAttributes = {};
-  Object.keys(inputs).filter((k) =>
-    inputs[k] !== '' && inputs[k].toLowerCase() !== 'no'
-      ? (selectedAttributes[k] = inputs[k])
-      : null
-  );
+  Object.keys(inputs).forEach((k) => {
+    if (
+      Array.isArray(inputs[k]) &&
+      inputs[k].length > 0 &&
+      k.toLocaleLowerCase() === 'color'
+    ) {
+      if (selectedAttributes[k]) {
+        selectedAttributes[k].push(inputs[k]);
+      } else selectedAttributes[k] = [inputs[k]];
+    } else if (
+      !Array.isArray(inputs[k]) &&
+      inputs[k] !== '' &&
+      inputs[k].toLowerCase() !== 'no'
+    ) {
+      selectedAttributes[k] = inputs[k];
+    }
+  });
   let filteredProducts = [];
   const selectedAttributesKeys = Object.keys(selectedAttributes);
   products.forEach((p) => {
     let matchCount = 0;
     p.attributes.forEach((at, i) => {
       const AttributeNameWithoutSpace = removeSpaces(at.name);
-      selectedAttributesKeys.includes(AttributeNameWithoutSpace) &&
-        at.items.forEach((item) => {
-          if (
-            item.value.toLowerCase() ===
-            selectedAttributes[AttributeNameWithoutSpace].toLowerCase()
-          )
-            matchCount += 1;
-        });
+      if (
+        Array.isArray(selectedAttributes[AttributeNameWithoutSpace]) &&
+        AttributeNameWithoutSpace.toLowerCase() === 'color' &&
+        selectedAttributes[AttributeNameWithoutSpace]?.length
+      ) {
+        const matchingColor = at.items.some((c) =>
+          selectedAttributes[AttributeNameWithoutSpace][0].includes(c.value)
+        );
+        if (matchingColor) {
+          matchCount += 1;
+        }
+      } else {
+        selectedAttributesKeys.includes(AttributeNameWithoutSpace) &&
+          at.items.forEach((item) => {
+            if (
+              item.value.toLowerCase() ===
+              selectedAttributes[AttributeNameWithoutSpace].toLowerCase()
+            )
+              matchCount += 1;
+          });
+      }
       if (matchCount === selectedAttributesKeys.length)
         filteredProducts.push(p);
     });

@@ -1,9 +1,7 @@
 import { Component } from 'react';
-import { compose } from 'redux';
 import CheckBox from '../common/Checkbox/Checkbox';
 import { getUniqueArray } from '../lib/HelperFns';
 import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
-import { WithForm } from '../lib/WithHOC/withForm/WithForm';
 import './Filter.scss';
 
 class Filter extends Component {
@@ -30,17 +28,7 @@ class Filter extends Component {
 
     this.setState({ productsAttributes: { ...Attributes } });
   }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { inputs, onSubmit } = this.props;
-    onSubmit(inputs);
-  };
 
-  handleResetFilter = () => {
-    this.props.resetForm();
-    this.props.onSearchParams({});
-    this.props.onReset();
-  };
   /**
    * @param {Object.key} k Object Key of attributes.
    * @returns select Html element
@@ -51,6 +39,7 @@ class Filter extends Component {
       onChange={this.props.handleChange}
       name={k}
       id={k}
+      value={this.props.inputs[k] || ''}
     >
       <option value=""></option>
       {this.state.productsAttributes[k].map((v) => {
@@ -76,7 +65,8 @@ class Filter extends Component {
           onClick={() => this.props.handleFilterColors(v)}
           key={v}
           className={
-            this.props.inputs[k] === v
+            this.props.inputs[k] &&
+            Object.values(this.props.inputs[k]).includes(v)
               ? 'color__box attribute-selectedColor '
               : 'color__box'
           }
@@ -104,17 +94,9 @@ class Filter extends Component {
     return (
       <div className="form__btn-container">
         <button
-          className="form__btn"
-          type="submit"
-          value="submit"
-          disabled={Object.keys(inputs).length === 0}
-        >
-          Filter
-        </button>
-        <button
           className="form__btn form__btn-reset"
-          type="reset"
-          onClick={this.handleResetFilter}
+          // type="reset"
+          onClick={() => this.props.onReset()}
         >
           Reset
         </button>
@@ -125,10 +107,13 @@ class Filter extends Component {
   render() {
     const { inputs } = this.props;
     const { productsAttributes } = this.state;
-
     return (
       <div className="filter__container">
-        <form className="form" onSubmit={this.handleSubmit} method="POST">
+        <form
+          className="form"
+          onSubmit={(e) => e.preventDefault()}
+          method="POST"
+        >
           <legend>
             <strong>Filter Products</strong>
           </legend>
@@ -152,4 +137,4 @@ class Filter extends Component {
   }
 }
 
-export default compose(withRouter, WithForm)(Filter);
+export default withRouter(Filter);
