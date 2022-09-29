@@ -5,7 +5,7 @@ import { withRouter } from '../lib/WithHOC/ReactRouter/WithRouter';
 import { compose } from 'redux';
 import Filter from '../Filter/Filter';
 import { getFilteredProducts } from '../lib/HelperFns';
-import toast from 'react-hot-toast';
+import { WithForm } from '../lib/WithHOC/withForm/WithForm';
 
 class Products extends Component {
   state = {
@@ -16,56 +16,46 @@ class Products extends Component {
     this.props.searchParam.forEach((value, key) =>
       value !== '' && value ? (result[key] = value) : null
     );
+    const co = this.props.searchParam.getAll('Color');
+    // if Colors exist in SearchParams, we assign it.
+    if (co.length) result.Color = [...co];
     if (Object.keys(result).length !== 0) {
+      this.props.onLoadInitInputs(result);
       const filtered = getFilteredProducts(this.props.products, result);
       this.setState({ filteredProducts: filtered });
     } else this.setState({ filteredProducts: this.props.products });
   }
-
+  handleFilterInputChange() {
+    const { inputs, products } = this.props;
+    if (Object.keys(inputs).length !== 0) {
+      return getFilteredProducts(products, inputs);
+    } else {
+      return products;
+    }
+  }
   render() {
-    // this.setState({ products: this.props.products });
     let currentPath = this.props.location.pathname;
     if (currentPath === '/') currentPath = '/all';
-
     return (
       <>
         <CategoryNameStyle>{currentPath.slice(1)}</CategoryNameStyle>
         <Filter
-          onSubmit={this.onSubmit}
           onReset={this.onReset}
           products={this.props.products}
+          inputs={this.props.inputs}
+          handleChange={this.props.handleChange}
+          handleFilterColors={this.props.handleFilterColors}
         />
         <ProductsContainer>
-          <ProductCard products={this.state.filteredProducts} />
+          <ProductCard products={this.handleFilterInputChange()} />
         </ProductsContainer>
       </>
     );
   }
 
-  onSubmit = (inputs) => {
-    // Validating inputs based on:
-    //  1- Empty values.
-    //  2- Empty Object with no keys.
-    const selectedAttributes = {};
-    Object.keys(inputs).filter((k) =>
-      inputs[k] !== '' && inputs[k] ? (selectedAttributes[k] = inputs[k]) : null
-    );
-    if (Object.keys(selectedAttributes).length === 0) {
-      this.setState({ filteredProducts: this.props.products });
-      this.props.onSearchParams({});
-      return toast.error(`Please select at least 1 filter option`);
-    }
-    this.props.onSearchParams(selectedAttributes);
-    const filtered = getFilteredProducts(
-      this.props.products,
-      selectedAttributes
-    );
-
-    this.setState({ filteredProducts: filtered });
-  };
   onReset = () => {
-    this.setState({ filteredProducts: this.props.products });
+    this.props.resetForm();
   };
 }
 
-export default compose(withRouter)(Products);
+export default compose(withRouter, WithForm)(Products);

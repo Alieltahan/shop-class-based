@@ -79,14 +79,32 @@ export const WithForm = (Component) => {
       });
     }
     function handleFilterColors(value) {
-      setInputs({ ...inputs, Color: value });
-      setSearchParams({
-        // copy the existing state
-        ...inputs,
-        Color: value,
-      });
+      // if no Colors are initiated yet in the State
+      if (!inputs.Color) {
+        setInputs({ ...inputs, Color: [value] });
+        setSearchParams({ ...inputs, Color: [value] });
+        // if Color Already exist, remove it
+      } else if (inputs.Color.includes(value)) {
+        let ColorValuesArray = [...inputs.Color];
+        const otherColors = ColorValuesArray.filter((c) => c !== value);
+        setInputs({ ...inputs, Color: otherColors });
+        setSearchParams({
+          // copy the existing state
+          ...inputs,
+          Color: otherColors,
+        });
+      } else if (inputs.Color) {
+        // Add new Color
+        let colorArray = [...inputs.Color];
+        colorArray.push(value);
+        setInputs({ ...inputs, Color: colorArray });
+        setSearchParams({
+          // copy the existing state
+          ...inputs,
+          Color: colorArray,
+        });
+      }
     }
-
     function resetForm() {
       setSearchParams({});
       setInputs({});
