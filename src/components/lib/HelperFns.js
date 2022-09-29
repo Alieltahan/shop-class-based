@@ -33,10 +33,6 @@ export const getFilteredProducts = (products, inputs) => {
         AttributeNameWithoutSpace.toLowerCase() === 'color' &&
         selectedAttributes[AttributeNameWithoutSpace]?.length
       ) {
-        console.log(
-          `HELPER Filter`,
-          selectedAttributes[AttributeNameWithoutSpace]
-        );
         const matchingColor = at.items.some((c) =>
           selectedAttributes[AttributeNameWithoutSpace].includes(c.value)
         );
