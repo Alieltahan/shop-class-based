@@ -12,7 +12,7 @@ import { Toaster } from 'react-hot-toast';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'http://localhost:4000',
+  uri: 'https://inspiring-biscotti-961109.netlify.app/',
 });
 
 const store = confStore();
